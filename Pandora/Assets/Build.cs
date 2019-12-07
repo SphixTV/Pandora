@@ -9,8 +9,8 @@ public class Build : MonoBehaviour
  
     public GridSystem gridSystem;
     //To Instantiate TargetObject at mouse position
-    public Transform targetObject;
-    public Transform blocks;
+    public int BlockID;
+
     public Transform child;
     float distance = 10f;
 
@@ -31,22 +31,29 @@ public class Build : MonoBehaviour
         targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, distance));
         targetPosition.x = Mathf.Round(targetPosition.x);
         targetPosition.y = Mathf.Round(targetPosition.y);
-        //Set the position of targetObject
-        targetObject.position = targetPosition;
+
 
         //Debug.Log(mousePosition+"   "+targetPosition);
-
+        var scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            BlockID++;
+        }
+        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            BlockID--;
+        }
 
         //If Left Button is clicked
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("SAS");
             block = new Block();
             block.blockID = 1;
             block.BlockName = "Erde";
             block.BlockPos = new Vector3(targetPosition.x, targetPosition.y, targetPosition.z);
+
             //create the instance of targetObject and place it at given position.
-            gridSystem.PlaceBlock(block, targetObject.gameObject, child);
+            gridSystem.PlaceBlock(block, BlockID, child);
         }
 
     }

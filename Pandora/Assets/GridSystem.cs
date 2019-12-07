@@ -8,53 +8,57 @@ public class GridSystem : MonoBehaviour
     private List<Block> blocklist;
     Block block;
     public BlockListe blockListe;
-    Block blockNew;
+   
 
-    public void PlaceBlock(Block block, GameObject gameObject, Transform child)
+
+    public void PlaceBlock(Block block, int BlockID, Transform child)
     {
-        
-        Debug.Log("LOL");
-        for (int i = 0; i < blocklist.Count; i++)
+        if (blocklist.Contains(block))
         {
-          
-            if(block.BlockPos != blocklist[i].BlockPos)
+            Debug.Log("YA");
+        }
+        else
+        {
+            
+            blocklist.Add (block);
+
+            
+            var Object = Instantiate(blockListe.GetObject(BlockID), block.BlockPos, Quaternion.identity, child);
+            Object.name = "Block at " + block.BlockPos;
+
+            for (int i = 0; i < blocklist.Count; i++)
             {
-                if (block.BlockPos.y + 1 == blocklist[i].BlockPos.y)
-                {
-                    blocklist[i].nabourTop = true;
-                }
-                else if (block.BlockPos.y - 1 == blocklist[i].BlockPos.y)
-                {
-                    blocklist[i].nabourBottom = true;
-                }
-                else if (block.BlockPos.x + 1 == blocklist[i].BlockPos.x)
-                {
-                    blocklist[i].nabourRight = true;
-                }
-                else if (block.BlockPos.x - 1 == blocklist[i].BlockPos.x)
+
+                if (block.BlockPos.y == blocklist[i].BlockPos.y && block.BlockPos.x -1 == blocklist[i].BlockPos.x )
                 {
                     blocklist[i].nabourLeft = true;
+                    block.nabourRight = true;
                 }
-                else
+                if (block.BlockPos.y == blocklist[i].BlockPos.y && block.BlockPos.x + 1 == blocklist[i].BlockPos.x)
                 {
-                    blocklist[i].nabourTop = false;
-                    blocklist[i].nabourBottom = false;
-                    blocklist[i].nabourRight = false;
-                    blocklist[i].nabourLeft = false;
+                    blocklist[i].nabourRight = true;
+                    block.nabourLeft = true;
                 }
-            }
-            
-            
-        }
+                if (block.BlockPos.x  == blocklist[i].BlockPos.x && block.BlockPos.y - 1 == blocklist[i].BlockPos.y)
+                {
+                    blocklist[i].nabourBottom = true;
+                    block.nabourTop = true;
+                }
+                if (block.BlockPos.x  == blocklist[i].BlockPos.x && block.BlockPos.y + 1 == blocklist[i].BlockPos.y)
+                {
+                    blocklist[i].nabourTop = true;
+                    block.nabourBottom = true;
+                }
 
-        blockNew = null;
-        blockNew.blockID = block.blockID;
-        blockNew.BlockName = block.BlockName;
-        blockNew.BlockPos = block.BlockPos;
-        blocklist.Add(blockNew);
+
+
+
+            }
+        }
+            
+
         
-       
-        Instantiate(gameObject, block.BlockPos, Quaternion.identity, child);
+        
 
     }
 }
@@ -82,4 +86,5 @@ public class Block
 
 
 }
+
 
